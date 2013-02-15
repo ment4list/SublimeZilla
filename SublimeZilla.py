@@ -85,28 +85,6 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		# config_view.insert(config_edit, 0, str( config_json ) )
 		# config_view.end_edit(config_edit)
 
-		# if not config_view.is_loading():
-			# config = sublime.load_settings("config.sftp-config")
-
-			# config.set( "type", "ftp" )
-
-			# config.set( "save_before_upload", True )
-			# config.set( "upload_on_save", False )
-			# config.set( "sync_down_on_open", False )
-			# config.set( "sync_skip_deletes", False )
-			# config.set( "confirm_downloads", False )
-			# config.set( "confirm_sync", True )
-			# config.set( "confirm_overwrite_newer", False )
-
-			# config.set( "host", self.server["host"] )
-			# config.set( "user", self.server["user"] )
-			# config.set( "password", self.server["password"] )
-			# config.set( "port", self.server["port"] )
-			# config.set( "remote_path", "/" )
-			# # config.set( "remote_path", self.server["remote_path"] )
-			# config.set( "connect_timeout", 30 )
-
-			# sublime.save_settings("config.sftp-config")
 
 	def save_config(self, filezilla_db_path):
 		print "DB Path:"
