@@ -233,14 +233,3 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		del paths[-1]
 
 		return "/".join( paths )
-
-# Create a config file relative to the current file
-class SublimeZillaConfigCommand(sublime_plugin.TextCommand):
-	def run(self, edit, new_file):
-		print new_file
-		new_file.insert(edit, 0, 'Yay')
-
-class SublimeZillaSFTPConfig(sublime_plugin.EventListener):
-	def on_load(self, view):
-		return
-		# print "VIEW LOADED"
