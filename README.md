@@ -15,7 +15,7 @@ Run `Package Control: Install Package` command, find and install `SublimeZilla` 
 
 1. You can run the plugin by using the Command Palette (`Ctrl+Shif+P`) type SublimeZilla or `fz` (yay fuzzy search! =D ) and hit enter. Or by going to Tools -> Sublime Zilla
 
-2. On the first run you'll be asked to browse to your FileZilla XML file which is in `c:\Users\[USER_NAME\]\AppData\Roaming\FileZilla\sitemanager.xml` by default
+2. On the first run you'll be asked to browse to your FileZilla XML file which is in `c:\Users\[USER_NAME]\AppData\Roaming\FileZilla\sitemanager.xml` by default
 
 3. A quick search will pop up with a list of all the servers contained in the FileZilla database. Select the one you want.
 
