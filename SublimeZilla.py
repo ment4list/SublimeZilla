@@ -79,7 +79,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 	def get_xml(self):
 		# The default location for FileZilla's XML database
-		default_xml = "c:\Users\Jurgens\AppData\Roaming\FileZilla\sitemanager.xml"
+		default_xml = ""
 
 		settings = sublime.load_settings("SublimeZilla.sublime-settings")
 		return settings.get("filezilla_db_path", default_xml)
