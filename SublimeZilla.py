@@ -145,6 +145,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 		return server_array
 
+	# Converts FileZilla's weird export method for remote directories to actual directories
 	def convertRemoteDir( self, filezilla_dir ):
 
 		# @Note botg's comment here: http://forum.filezilla-project.org/viewtopic.php?f=1&t=15923 might shed some light on why FileZilla exports the directories this way
