@@ -11,10 +11,12 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		settings = sublime.load_settings("SublimeZilla.sublime-settings")
 
 		if settings.get("filezilla_db_path", "") == "":
-			self.window.show_input_panel( 'Browse to FileZilla directory', "c:\\", self.save_config, None, None )
+			self.window.show_input_panel( 'Browse to FileZilla directory', self.get_xml(), self.save_config, None, None )
+		else:
+			self.quick_panel()
 
+	def quick_panel(self):
 		server_names = self.get_server_names()
-
 		self.window.show_quick_panel( server_names, self.server_chosen, sublime.MONOSPACE_FONT )
 
 	# A server was chosen
@@ -75,6 +77,13 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		config_view.insert(config_edit, 0, config_json)
 		config_view.end_edit(config_edit)
 
+	def get_xml(self):
+		# The default location for FileZilla's XML database
+		default_xml = "c:\Users\Jurgens\AppData\Roaming\FileZilla\sitemanager.xml"
+
+		settings = sublime.load_settings("SublimeZilla.sublime-settings")
+		return settings.get("filezilla_db_path", default_xml)
+
 
 	def save_config(self, filezilla_db_path):
 		print "DB Path:"
@@ -82,6 +91,9 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		settings = sublime.load_settings("SublimeZilla.sublime-settings")
 		settings.set("filezilla_db_path", filezilla_db_path)
 		sublime.save_settings("SublimeZilla.sublime-settings")
+
+		# Now, show the quick panel
+		self.quick_panel()
 
 	def create_project_config(self):
 		self.config_view = self.window.new_file()
@@ -97,8 +109,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		return server_names
 
 	def get_server_entries(self):
-		fz_xml = "c:\Users\Jurgens\AppData\Roaming\FileZilla\sitemanager.xml"
-		xmldoc = minidom.parse(fz_xml)
+		xmldoc = minidom.parse( self.get_xml() )
 		itemlist = xmldoc.getElementsByTagName('Server')
 		server_array = []
 
@@ -132,12 +143,16 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 			if( LocalDir[0].firstChild is not None ):
 				LocalDirVal = LocalDir[0].firstChild.nodeValue
 				server_obj["local_path"] = str(LocalDirVal)
+			else:
+				server_obj["local_path"] = ""
 
 			RemoteDir = server.getElementsByTagName('RemoteDir')
 
 			if( RemoteDir[0].firstChild is not None ):
 				RemoteDirVal = RemoteDir[0].firstChild.nodeValue
 				server_obj["remote_path"] = self.convertRemoteDir( str(RemoteDirVal) )
+			else:
+				server_obj["remote_path"] = ""
 
 			# Add this server to the array
 			server_array.append(server_obj)
