@@ -42,18 +42,13 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 	def set_sftp_config(self):
 
-		project_folder = self.getProjectFolder()
-
-		# Copy the default SFTP config file to the project
-		# shutil.copy2(sftp_path_default_config, project_folder + "/config.sftp-config")
-		f = project_folder + "/config.sftp-config"
-
-		config_file = open(f, 'w')
-
 		import json
+
+		project_folder = self.getProjectFolder()
 
 		server_config = {
 			"type": "ftp",
+
 			"save_before_upload": True,
 			"upload_on_save": False,
 			"sync_down_on_open": False,
@@ -71,19 +66,15 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		}
 
 		config_json = json.dumps(server_config)
-		print config_json
 
-		config_file.write(config_json)
-		config_file.close()
+		config_view = self.window.new_file()
+		config_view.set_name("sftp-config.json")
+		config_view.set_syntax_file("Packages/JavaScript/JSON.tmLanguage")
 
-		config_view = self.window.open_file(f)
-		config_view.set_syntax_file('Packages/JavaScript/JSON.tmLanguage')
+		config_edit = config_view.begin_edit()
 
-		# sublime_plugin.on_load(config_view)
-
-		# config_edit = config_view.begin_edit()
-		# config_view.insert(config_edit, 0, str( config_json ) )
-		# config_view.end_edit(config_edit)
+		config_view.insert(config_edit, 0, config_json)
+		config_view.end_edit(config_edit)
 
 
 	def save_config(self, filezilla_db_path):
@@ -147,7 +138,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 			if( RemoteDir[0].firstChild is not None ):
 				RemoteDirVal = RemoteDir[0].firstChild.nodeValue
-				server_obj["remote_path"] = str(RemoteDirVal)
+				server_obj["remote_path"] = self.convertRemoteDir( str(RemoteDirVal) )
 
 			# Add this server to the array
 			server_array.append(server_obj)
