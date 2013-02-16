@@ -1,6 +1,3 @@
 [
-	{
-		"keys": ["super+option+s+f"], "command": "sublime_zilla"
-		// "keys": ["ctrl+alt+f", "ctrl+alt+s"], "command": "sublime_zilla"
-	}
+	{ "keys": ["super+alt+z"], "command": "sublime_zilla" }
 ]
