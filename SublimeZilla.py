@@ -25,7 +25,6 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 			return
 
 		self.server = self.get_server(server_index)
-		print self.server["name"]
 
 		# Copy default SFTP config to current project root
 		packages_path = sublime.packages_path()
@@ -86,8 +85,6 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 
 	def save_config(self, filezilla_db_path):
-		print "DB Path:"
-		print filezilla_db_path
 		settings = sublime.load_settings("SublimeZilla.sublime-settings")
 		settings.set("filezilla_db_path", filezilla_db_path)
 		sublime.save_settings("SublimeZilla.sublime-settings")
@@ -127,7 +124,6 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 			Port = server.getElementsByTagName('Port')
 			PortVal = Port[0].firstChild.nodeValue
-			# print Port[0].firstChild.nodeValue
 			server_obj["port"] = str(PortVal)
 
 			User = server.getElementsByTagName('User')
