@@ -1,0 +1,6 @@
+[
+	{
+		"keys": ["ctrl+alt+s+f"], "command": "sublime_zilla"
+		// "keys": ["ctrl+alt+f", "ctrl+alt+s"], "command": "sublime_zilla"
+	}
+]

@@ -1,0 +1,9 @@
+[
+	{
+		"id": "tools",
+		"children": [
+			// { "id": "test" },
+			{ "command": "sublime_zilla" }
+		]
+	}
+]
