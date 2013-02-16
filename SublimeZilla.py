@@ -145,6 +145,26 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 		return server_array
 
+	def convertRemoteDir( self, filezilla_dir ):
+
+		# @Note botg's comment here: http://forum.filezilla-project.org/viewtopic.php?f=1&t=15923 might shed some light on why FileZilla exports the directories this way
+
+		regex = "^((\d{1,2}\s){3})(.+)?$"
+		modifiers = "gm"
+
+		re_compile = re.compile( regex, re.M )
+		results = re.split( regex, filezilla_dir )
+
+		fz_remote_dir = results[3]
+
+		# Replace all instances of \s\d{1,2}\s within capture group 3 with a "/" because it is seen as a directory by FileZilla
+		slash_regex = "\s\d{1,2}\s"
+
+		with_slashes = re.split( slash_regex, fz_remote_dir )
+
+		return with_slashes + "/"
+
+
 	def get_server(self, server_index):
 		return self.servers[server_index]
 
