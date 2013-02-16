@@ -60,8 +60,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 			"user": self.server["user"],
 			"password": self.server["password"],
 			"port": self.server["port"],
-			"remote_path": "/",
-			# "remote_path": self.server["remote_path"],
+			"remote_path": self.server["remote_path"],
 			"connect_timeout": 30
 		}
 
@@ -163,7 +162,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 		with_slashes = re.split( slash_regex, fz_remote_dir )
 
-		return with_slashes + "/"
+		return "/".join( with_slashes ) + "/"
 
 
 	def get_server(self, server_index):
