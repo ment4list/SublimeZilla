@@ -173,7 +173,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 		with_slashes = re.split( slash_regex, fz_remote_dir )
 
-		return "/".join( with_slashes ) + "/"
+		return "/" + "/".join( with_slashes ) + "/"
 
 
 	def get_server(self, server_index):
