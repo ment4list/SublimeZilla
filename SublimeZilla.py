@@ -81,7 +81,12 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		default_xml = ""
 
 		settings = sublime.load_settings("SublimeZilla.sublime-settings")
-		return settings.get("filezilla_db_path", default_xml)
+		path = settings.get("filezilla_db_path", default_xml)
+
+		if not os.path.exists( path ):
+			path = settings.get("filezilla_db_path2", default_xml)
+
+		return path
 
 
 	def save_config(self, filezilla_db_path):
@@ -166,14 +171,19 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		re_compile = re.compile( regex, re.M )
 		results = re.split( regex, filezilla_dir )
 
-		fz_remote_dir = results[3]
+		try:
+			fz_remote_dir = results[3]
+			# Replace all instances of \s\d{1,2}\s within capture group 3 with a "/" because it is seen as a directory by FileZilla
+			slash_regex = "\s\d{1,2}\s"
 
-		# Replace all instances of \s\d{1,2}\s within capture group 3 with a "/" because it is seen as a directory by FileZilla
-		slash_regex = "\s\d{1,2}\s"
+			with_slashes = re.split( slash_regex, fz_remote_dir )
 
-		with_slashes = re.split( slash_regex, fz_remote_dir )
+			return "/" + "/".join( with_slashes ) + "/"
 
-		return "/" + "/".join( with_slashes ) + "/"
+		except IndexError:
+			return '/'
+
+
 
 
 	def get_server(self, server_index):
