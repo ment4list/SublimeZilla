@@ -47,7 +47,6 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 		server_config = {
 			"type": "ftp",
-
 			"save_before_upload": True,
 			"upload_on_save": False,
 			"sync_down_on_open": False,
@@ -75,8 +74,17 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		config_view.end_edit(config_edit)
 
 	def get_xml(self):
-		# The default location for FileZilla's XML database
-		default_xml = ""
+
+		current_os = sublime.platform()
+		os_username = os.environ.get( "USERNAME" )
+
+		# The default locations for FileZilla's XML database
+		if( current_os == "windows" ):
+			default_xml = "c:\\Users\\" + os_username + "\\AppData\\Roaming\\FileZilla\\sitemanager.xml"
+		elif( current_os == "linux" ):
+			default_xml = "/home/" + os_username + "/.filezilla/sitemanager.xml"
+		elif( current_os == "osx" ):
+			default_xml = "/users/" + os_username + "/.filezilla/sitemanager.xml"
 
 		settings = sublime.load_settings("SublimeZilla.sublime-settings")
 		path = settings.get("filezilla_db_path", default_xml)
