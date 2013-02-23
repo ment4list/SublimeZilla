@@ -13,10 +13,16 @@ Run `Package Control: Install Package` command, find and install `SublimeZilla` 
 
 ## Usage
 
-1. You can run the plugin by using the Command Palette (`Ctrl+Shif+P`) type SublimeZilla or `fz` (yay fuzzy search! =D ) and hit enter. Or by going to Tools -> Sublime Zilla
+1. You can run the plugin by using the Command Palette (`Ctrl+Alt+Z`) type SublimeZilla or `fz` (yay fuzzy search! =D ) and hit enter. Or by going to Tools -> Sublime Zilla
 
-2. On the first run you'll be asked to browse to your FileZilla XML file which is in `c:\Users\[USER_NAME]\AppData\Roaming\FileZilla\sitemanager.xml` by default
+2. On the first run you'll be asked to browse to your FileZilla XML file via the input panel (at the bottom of the screen) which is located as follows:
+
+	* Windows 7 & Vista – `C:\Users\[USER_NAME]\AppData\Roaming\FileZilla\sitemanager.xml`
+	* Mac OS X – `/users/[USER_NAME]/.filezilla/sitemanager.xml`
+	* Linux – `/home/[USER_NAME]/.filezilla/sitemanager.xml`
 
 3. A quick search will pop up with a list of all the servers contained in the FileZilla database. Select the one you want.
 
 4. A new file will be opened called `sftp-config.json`. Save this file in the root of your project
+
+5. You can now interact with this server via the SFTP plugin
