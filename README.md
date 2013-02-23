@@ -26,3 +26,12 @@ Run `Package Control: Install Package` command, find and install `SublimeZilla` 
 4. A new file will be opened called `sftp-config.json`. Save this file in the root of your project
 
 5. You can now interact with this server via the SFTP plugin
+
+Help
+====
+
+Unfortunatly I'm unable to test it on Linux or OSX. Please let me know if it is working!
+
+Please report bugs here so I can try and fix it.
+
+Thanks for trying it out!
