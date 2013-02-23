@@ -46,32 +46,65 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		import json
 
 		server_config = {
-			"type": "ftp",
-			"save_before_upload": True,
-			"upload_on_save": False,
-			"sync_down_on_open": False,
-			"sync_skip_deletes": False,
-			"confirm_downloads": False,
-			"confirm_sync": True,
-			"confirm_overwrite_newer": False,
-			"host": self.server["host"],
-			"user": self.server["user"],
-			"password": self.server["password"],
-			"port": self.server["port"],
-			"remote_path": self.server["remote_path"],
-			"connect_timeout": 30
+			"type": "${1:sftp}",
+			"save_before_upload": "${2:true}",
+			"upload_on_save": "${3:false}",
+			"sync_down_on_open": "${4:false}",
+			"sync_skip_deletes": "${5:false}",
+			"confirm_downloads": "${6:false}",
+			"confirm_sync": "${7:true}",
+			"confirm_overwrite_newer": "${8:false}",
+
+			"host": "${9:" + self.server["host"] + "}",
+			"user": "${10:" + self.server["user"] + "}",
+			"password": "${11:" + self.server["password"] + "}",
+			"port": "${12:" + self.server["port"] + "}",
+			"remote_path": "${13:" + self.server["remote_path"] + "}",
+			"connect_timeout": "${14:30}",
+
+			"ignore_regexes": "[${15:\
+		        '\\\.sublime-(project|workspace)', 'sftp-config(-alt\\\d?)?\\\.json',\
+		        'sftp-settings\\\.json', '/venv/', '\\\.svn', '\\\.hg', '\\\.git',\
+		        '\\\.bzr', '_darcs', 'CVS', '\\\.DS_Store', 'Thumbs\\\.db', 'desktop\\\.ini'\
+		    }]",
+		    "file_permissions": "${16:664}",
+		    "dir_permissions": "${17:775}",
+
+		    "extra_list_connections": "${18:0}",
+
+		    "keepalive": "${19:120}",
+		    "ftp_passive_mode": "${20:true}",
+		    "ssh_key_file": "${21:~/.ssh/id_rsa}",
+		    "sftp_flags": "[${22:'-F', '/path/to/ssh_config'}]",
+
+		    "preserve_modification_times": "${23:false}",
+		    "remote_time_offset_in_hours": "${24:0}",
+		    "remote_encoding": "${25:utf-8}",
+		    "remote_locale": "${26:C}",
 		}
 
-		config_json = json.dumps(server_config)
+		config_json = json.dumps(server_config, indent=4, separators=(',', ': '))
 
 		config_view = self.window.new_file()
 		config_view.set_name("sftp-config.json")
 		config_view.set_syntax_file("Packages/JavaScript/JSON.tmLanguage")
 
-		config_edit = config_view.begin_edit()
+		# Check for SFTP config file
+		SFTP_config = sublime.packages_path() + "/SFTP/SFTP.default-config"
 
-		config_view.insert(config_edit, 0, config_json)
-		config_view.end_edit(config_edit)
+		if os.path.exists( SFTP_config ):
+			print "YES"
+			f = open(SFTP_config, 'r')
+			config_snippet = f.read()
+			f.close()
+
+			# config_view.run_command("insert_snippet", {'name': SFTP_config})
+			config_view.run_command("insert_snippet", {'contents': config_json})
+
+		# config_edit = config_view.begin_edit()
+
+		# config_view.insert(config_edit, 0, config_json)
+		# config_view.end_edit(config_edit)
 
 	def get_xml(self):
 
