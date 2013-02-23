@@ -45,8 +45,6 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 		import json
 
-		project_folder = self.getProjectFolder()
-
 		server_config = {
 			"type": "ftp",
 
@@ -183,59 +181,9 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		except IndexError:
 			return '/'
 
-
-
-
 	def get_server(self, server_index):
 		return self.servers[server_index]
 
 	# getDirectories taken from Packages\SideBarEnhancements\sidebar\SideBarProject.py
 	def getDirectories(self):
 		return sublime.active_window().folders()
-
-	# getProjectFile taken from Packages\SideBarEnhancements\sidebar\SideBarProject.py
-	def getProjectFile(self):
-		if not self.getDirectories():
-			return None
-		import json
-		data = file(os.path.normpath(os.path.join(sublime.packages_path(), '..', 'Settings', 'Session.sublime_session')), 'r').read()
-		data = data.replace('\t', ' ')
-		data = json.loads(data, strict=False)
-		projects = data['workspaces']['recent_workspaces']
-
-		if os.path.lexists(os.path.join(sublime.packages_path(), '..', 'Settings', 'Auto Save Session.sublime_session')):
-			data = file(os.path.normpath(os.path.join(sublime.packages_path(), '..', 'Settings', 'Auto Save Session.sublime_session')), 'r').read()
-			data = data.replace('\t', ' ')
-			data = json.loads(data, strict=False)
-			if 'workspaces' in data and 'recent_workspaces' in data['workspaces'] and data['workspaces']['recent_workspaces']:
-				projects += data['workspaces']['recent_workspaces']
-			projects = list(set(projects))
-		for project_file in projects:
-			project_file = re.sub(r'^/([^/])/', '\\1:/', project_file);
-			project_json = json.loads(file(project_file, 'r').read(), strict=False)
-			if 'folders' in project_json:
-				folders = project_json['folders']
-				found_all = True
-				for directory in self.getDirectories():
-					found = False
-					for folder in folders:
-						folder_path = re.sub(r'^/([^/])/', '\\1:/', folder['path']);
-						if folder_path == directory.replace('\\', '/'):
-							found = True
-							break;
-					if found == False:
-						found_all = False
-						break;
-			if found_all:
-				return project_file
-		return None
-
-	# Use SidebarEnhancement's getProjectFile and remove the last file
-	def getProjectFolder(self):
-		import string
-		project_file = self.getProjectFile()
-
-		paths = string.split(project_file, "/")
-		del paths[-1]
-
-		return "/".join( paths )
