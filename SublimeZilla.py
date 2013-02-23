@@ -92,19 +92,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		# Check for SFTP config file
 		SFTP_config = sublime.packages_path() + "/SFTP/SFTP.default-config"
 
-		if os.path.exists( SFTP_config ):
-			print "YES"
-			f = open(SFTP_config, 'r')
-			config_snippet = f.read()
-			f.close()
-
-			# config_view.run_command("insert_snippet", {'name': SFTP_config})
-			config_view.run_command("insert_snippet", {'contents': config_json})
-
-		# config_edit = config_view.begin_edit()
-
-		# config_view.insert(config_edit, 0, config_json)
-		# config_view.end_edit(config_edit)
+		config_view.run_command("insert_snippet", {'contents': config_json})
 
 	def get_xml(self):
 
