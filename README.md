@@ -27,6 +27,17 @@ Run `Package Control: Install Package` command, find and install `SublimeZilla` 
 
 5. You can now interact with this server via the SFTP plugin
 
+### Alternate locations
+
+Only 2 locations are supported at the moment. To save the first one follow steps 1 and 2 above.
+
+A new file will have been created in `/Packages/User/SublimeZilla` and it will contain a path to the default FileZilla DB
+
+`"filezilla_db_path": "C:\Users\[USER_NAME]\AppData\Roaming\FileZilla\sitemanager.xml"`
+
+To add another path you can add a `"filezilla_db_path2"` setting with the secondary path as it's value.
+
+
 Help
 ====
 
