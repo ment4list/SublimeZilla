@@ -46,53 +46,57 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		import json
 
 		server_config = {
-			"type": "${1:sftp}",
-			"save_before_upload": "${2:true}",
-			"upload_on_save": "${3:false}",
-			"sync_down_on_open": "${4:false}",
-			"sync_skip_deletes": "${5:false}",
-			"confirm_downloads": "${6:false}",
-			"confirm_sync": "${7:true}",
-			"confirm_overwrite_newer": "${8:false}",
-
-			"host": "${9:" + self.server["host"] + "}",
-			"user": "${10:" + self.server["user"] + "}",
-			"password": "${11:" + self.server["password"] + "}",
-			"port": "${12:" + self.server["port"] + "}",
-			"remote_path": "${13:" + self.server["remote_path"] + "}",
-			"connect_timeout": "${14:30}",
-
-			"ignore_regexes": "[${15:\
-		        '\\\.sublime-(project|workspace)', 'sftp-config(-alt\\\d?)?\\\.json',\
-		        'sftp-settings\\\.json', '/venv/', '\\\.svn', '\\\.hg', '\\\.git',\
-		        '\\\.bzr', '_darcs', 'CVS', '\\\.DS_Store', 'Thumbs\\\.db', 'desktop\\\.ini'\
-		    }]",
-		    "file_permissions": "${16:664}",
-		    "dir_permissions": "${17:775}",
-
-		    "extra_list_connections": "${18:0}",
-
-		    "keepalive": "${19:120}",
-		    "ftp_passive_mode": "${20:true}",
-		    "ssh_key_file": "${21:~/.ssh/id_rsa}",
-		    "sftp_flags": "[${22:'-F', '/path/to/ssh_config'}]",
-
-		    "preserve_modification_times": "${23:false}",
-		    "remote_time_offset_in_hours": "${24:0}",
-		    "remote_encoding": "${25:utf-8}",
-		    "remote_locale": "${26:C}",
+			"host": self.server["host"],
+			"user": self.server["user"],
+			"password": self.server["password"],
+			"port": self.server["port"],
+			"remote_path": self.server["remote_path"]
 		}
 
-		config_json = json.dumps(server_config, indent=4, separators=(',', ': '))
-
+		# Open a new buffer and name it
 		config_view = self.window.new_file()
 		config_view.set_name("sftp-config.json")
 		config_view.set_syntax_file("Packages/JavaScript/JSON.tmLanguage")
 
 		# Check for SFTP config file
 		SFTP_config = sublime.packages_path() + "/SFTP/SFTP.default-config"
+		if os.path.exists( SFTP_config ):
 
-		config_view.run_command("insert_snippet", {'contents': config_json})
+			# Grab the snippet text
+			f = open(SFTP_config, 'r')
+			config_json = f.read()
+			f.close()
+
+			# Replace snippet defaults with found variables
+			snippet = self.intercept_sftp( server_config, config_json )
+
+			# Insert the snippet. It can be tabbed through!
+			config_view.run_command("insert_snippet", {'contents': snippet})
+
+		else:
+			config_json = json.dumps(server_config, sort_keys=False, indent=4, separators=(',', ': '))
+			config_view.run_command("insert_snippet", {'contents': config_json})
+
+	# A function that takes the raw snippet text from /SFTP/SFTP.default-config and replaces it with the FZ db
+	# default_sftp is the object that contains the FileZilla db entries
+	# sftp_snippet is the SFTP snippet contents
+	def intercept_sftp(self, default_sftp, sftp_snippet):
+
+		print str(default_sftp["port"])
+
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)example.com(\})', 	r'\1' + default_sftp["host"] + r'\2', 		sftp_snippet, re.M )
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)username(\})', 		r'\1' + default_sftp["user"] + r'\2', 		new_snippet, re.M )
+
+		# Remove // before password key
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)//(\})("password":)', r'\3', 										new_snippet, re.M )
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)password(\})', 		r'\1' + default_sftp["password"] + r'\2', 	new_snippet, re.M )
+
+		#@TODO: fix the port issue.. for some reason it inserts "Q}".. testing on http://gskinner.com/RegExr/ provides the results I expect.. strange
+		# new_snippet = re.sub(r'(\$\{\d{1,2}\:)22(\})', 				r'\1' + str(default_sftp["port"]) + r'\2', 	new_snippet, re.M )
+		print new_snippet
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)/example/path/(\})',  r'\1' + default_sftp["remote_path"] + r'\2', 	new_snippet, re.M )
+
+		return new_snippet
 
 	def get_xml(self):
 
