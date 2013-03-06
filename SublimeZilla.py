@@ -82,19 +82,19 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 	# sftp_snippet is the SFTP snippet contents
 	def intercept_sftp(self, default_sftp, sftp_snippet):
 
-		print str(default_sftp["port"])
+		print default_sftp["host"]
+		variableTest = ""
 
-		new_snippet = re.sub(r'(\$\{\d{1,2}\:)example.com(\})', 	r'\1' + default_sftp["host"] + r'\2', 		sftp_snippet, re.M )
-		new_snippet = re.sub(r'(\$\{\d{1,2}\:)username(\})', 		r'\1' + default_sftp["user"] + r'\2', 		new_snippet, re.M )
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)example.com(\})', 	r'\g<1>' + default_sftp["host"] + r'\g<2>', 		sftp_snippet, re.M )
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)username(\})', 		r'\g<1>' + default_sftp["user"] + r'\g<2>', 		new_snippet, re.M )
 
 		# Remove // before password key
-		new_snippet = re.sub(r'(\$\{\d{1,2}\:)//(\})("password":)', r'\3', 										new_snippet, re.M )
-		new_snippet = re.sub(r'(\$\{\d{1,2}\:)password(\})', 		r'\1' + default_sftp["password"] + r'\2', 	new_snippet, re.M )
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)//(\})("password":)', r'\g<3>', 											new_snippet, re.M )
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)password(\})', 		r'\g<1>' + default_sftp["password"] + r'\g<2>', 	new_snippet, re.M )
 
 		#@TODO: fix the port issue.. for some reason it inserts "Q}".. testing on http://gskinner.com/RegExr/ provides the results I expect.. strange
-		# new_snippet = re.sub(r'(\$\{\d{1,2}\:)22(\})', 				r'\1' + str(default_sftp["port"]) + r'\2', 	new_snippet, re.M )
-		print new_snippet
-		new_snippet = re.sub(r'(\$\{\d{1,2}\:)/example/path/(\})',  r'\1' + default_sftp["remote_path"] + r'\2', 	new_snippet, re.M )
+		# new_snippet = re.sub(r'(\$\{\d{1,2}\:)22(\})', 				r'\g<1>' + str(default_sftp["port"]) + r'\g<2>', 	new_snippet, re.M )
+		new_snippet = re.sub(r'(\$\{\d{1,2}\:)/example/path/(\})',  r'\g<1>' + default_sftp["remote_path"] + r'\g<2>', 	new_snippet, re.M )
 
 		return new_snippet
 
