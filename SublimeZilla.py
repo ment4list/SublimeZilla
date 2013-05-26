@@ -107,6 +107,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		if( current_os == "windows" ):
 			default_xml = "c:\\Users\\" + os_username + "\\AppData\\Roaming\\FileZilla\\sitemanager.xml"
 		elif( current_os == "linux" ):
+			os_username = os.environ.get( "USER" )
 			default_xml = "/home/" + os_username + "/.filezilla/sitemanager.xml"
 		elif( current_os == "osx" ):
 			default_xml = "/users/" + os_username + "/.filezilla/sitemanager.xml"
