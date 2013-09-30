@@ -82,7 +82,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 	# sftp_snippet is the SFTP snippet contents
 	def intercept_sftp(self, default_sftp, sftp_snippet):
 
-		print default_sftp["host"]
+		# print default_sftp["host"]
 		variableTest = ""
 
 		new_snippet = re.sub(r'(\$\{\d{1,2}\:)example.com(\})', 	r'\g<1>' + default_sftp["host"] + r'\g<2>', 		sftp_snippet, re.M )
