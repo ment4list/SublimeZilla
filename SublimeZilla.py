@@ -100,17 +100,23 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
 	def get_xml(self):
 
-		current_os = sublime.platform()
-		os_username = os.environ.get( "USERNAME" )
+		user_home = os.curdir
+
+		if 'HOME' in os.environ:
+			user_home = os.environ['HOME']
+		elif os.name == 'posix':
+			user_home = os.path.expanduser("~")
+		elif os.name == 'nt':
+			if 'HOMEPATH' in os.environ and 'HOMEDRIVE' in os.environ:
+				user_home = os.environ['HOMEDRIVE'] + os.environ['HOMEPATH']
+		else:
+			user_home = os.environ['HOMEPATH']
 
 		# The default locations for FileZilla's XML database
-		if( current_os == "windows" ):
-			default_xml = "c:\\Users\\" + os_username + "\\AppData\\Roaming\\FileZilla\\sitemanager.xml"
-		elif( current_os == "linux" ):
-			os_username = os.environ.get( "USER" )
-			default_xml = "/home/" + os_username + "/.filezilla/sitemanager.xml"
-		elif( current_os == "osx" ):
-			default_xml = "/users/" + os_username + "/.filezilla/sitemanager.xml"
+		if os.name == 'nt':
+			default_xml = user_home + os.sep + "AppData\\Roaming\\FileZilla\\sitemanager.xml"
+		elif os.name == 'posix':
+			default_xml = user_home + os.sep + ".filezilla/sitemanager.xml"
 
 		settings = sublime.load_settings("SublimeZilla.sublime-settings")
 		path = settings.get("filezilla_db_path", default_xml)
