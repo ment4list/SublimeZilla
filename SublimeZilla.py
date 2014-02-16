@@ -124,6 +124,10 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 		if not os.path.exists( path ):
 			path = settings.get("filezilla_db_path2", default_xml)
 
+			if not os.path.exists( path ):
+				sublime.error_message("File sitemanager.xml not found. Is FileZilla installed?")
+				return None
+
 		return path
 
 
