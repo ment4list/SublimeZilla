@@ -2,8 +2,10 @@
 	{
 		"id": "tools",
 		"children": [
-			// { "id": "test" },
-			{ "command": "sublime_zilla" }
+			{
+				"caption": "SublimeZilla",
+				"command": "sublime_zilla"
+			}
 		]
 	}
 ]
