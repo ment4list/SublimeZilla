@@ -125,6 +125,11 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
         # The default locations for FileZilla's XML database
         if os.name == 'nt':
             default_xml = user_home + os.sep + "AppData\\Roaming\\FileZilla\\sitemanager.xml"
+
+            # Fix for Win XP
+            if not os.path.exists(default_xml):
+            	default_xml = user_home + os.sep + "Application Data\\FileZilla\\sitemanager.xml"
+
         elif os.name == 'posix':
             default_xml = user_home + os.sep + ".filezilla/sitemanager.xml"
 
