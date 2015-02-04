@@ -207,7 +207,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
                 server_obj["user"] = ""
 
             Pass = server.getElementsByTagName('Pass')
-            if Pass[0].firstChild is not None:
+            if len(Pass) > 0 and Pass[0].firstChild is not None:
                 PassVal = Pass[0].firstChild.nodeValue
                 server_obj["password"] = str(PassVal)
             else:
