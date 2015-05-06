@@ -18,7 +18,7 @@ Clone or [download](https://github.com/ment4list/SublimeZilla/archive/master.zip
 2. On the first run, you'll be asked to browse to your FileZilla XML file (sitemanager.xml) via the input panel (at the bottom of the screen) which is located by default as follows:
 
 	* Windows – `C:\Users\[USER_NAME]\AppData\Roaming\FileZilla\sitemanager.xml`
-	* OS X – `/Users/[USER_NAME]/.filezilla/sitemanager.xml`
+	* OS X – `/Users/[USER_NAME]/.config/filezilla/sitemanager.xml`
 	* Linux – `/home/[USER_NAME]/.filezilla/sitemanager.xml`
 
 3. A quick search will pop up with a list of all the servers contained in the FileZilla database. Select the one you want.
