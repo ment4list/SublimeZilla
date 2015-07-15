@@ -1,7 +1,9 @@
 import sublime, sublime_plugin
 import shutil
+import base64
 import os
 import re
+import binascii
 
 from xml.dom import minidom
 
@@ -209,7 +211,23 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
             Pass = server.getElementsByTagName('Pass')
             if len(Pass) > 0 and Pass[0].firstChild is not None:
                 PassVal = Pass[0].firstChild.nodeValue
-                server_obj["password"] = str(PassVal)
+
+                # Try base64 decode...
+                PassVal = str(PassVal)
+                PassValTmp = ""
+
+                try:
+                    PassValTmp = base64.b64decode(PassVal).decode('utf-8')
+                    PassValTmp = str(PassValTmp)
+                except TypeError:
+                    # Is probably not encoded, use what we had
+                    PassValTmp = PassVal
+                except binascii.Error:
+                    # Is probably not encoded, use what we had
+                    PassValTmp = PassVal
+
+                server_obj["password"] = PassValTmp
+
             else:
                 server_obj["password"] = ""
 
