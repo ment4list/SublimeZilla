@@ -45,4 +45,20 @@ The plugin has been tested with Sublime Text 2 and 3, using FileZilla 3.7.4.1, o
 
 Please report bugs here so we can try and fix it.
 
+Troubleshooting
+====
+
+### FileZilla not found error
+
+If the plugin has trouble accessing FileZilla try changing the default location to your `sitemanager.xml` file.
+
+To do this, create a new file called `SublimeZilla.sublime-settings` in `/Packages/User/`. 
+
+Add the following to this new file:
+
+* For Windows: 
+`{"filezilla_db_path": "C:\Users\[USER_NAME]\AppData\Roaming\FileZilla\sitemanager.xml"}`
+* For OSX: 
+`{"filezilla_db_path" : "/Users/[OSX_USER]/.config/filezilla/sitemanager.xml"}`
+
 Thanks for trying it out!
