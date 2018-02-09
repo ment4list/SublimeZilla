@@ -7,6 +7,10 @@ import binascii
 
 from xml.dom import minidom
 
+class ReplaceSpecialCommand(sublime_plugin.TextCommand):
+    def run(self, edit, find, replace):
+        pw_pos = self.view.find(find, 0, sublime.LITERAL)
+        res = self.view.replace(edit, pw_pos, replace)
 
 class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
@@ -81,6 +85,14 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
             # Insert the snippet. It can be tabbed through!
             config_view.run_command("insert_snippet", {'contents': snippet})
 
+            # Replace the password using a placeholder to avoid special character issues
+            config_view.run_command("replace_special", {
+                'find': '[PASSWORD_PLACEHOLDER]',
+                'replace': server_config['password']
+            })
+
+            # new_snippet = new_snippet.replace("[PASSWORD_PLACEHOLDER]", default_sftp['password'])
+
         else:
             config_json = json.dumps(server_config, sort_keys=False, indent=4, separators=(',', ': '))
             config_view.run_command("insert_snippet", {'contents': config_json})
@@ -100,7 +112,7 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
 
         # Remove // before password key
         new_snippet = re.sub(r'(\$\{\d{1,2}\:)//(\})("password":)', r'\g<3>', new_snippet, re.M)
-        new_snippet = re.sub(r'(\$\{\d{1,2}\:)password(\})', r'\g<1>' + default_sftp["password"] + r'\g<2>',
+        new_snippet = re.sub(r'(\$\{\d{1,2}\:)password(\})', r'\g<1>' + "[PASSWORD_PLACEHOLDER]" + r'\g<2>',
                              new_snippet, re.M)
 
         # @TODO: fix the port issue.. for some reason it inserts "Q}".. testing on http://gskinner.com/RegExr/ provides the results I expect.. strange
