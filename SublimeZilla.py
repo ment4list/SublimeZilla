@@ -234,6 +234,10 @@ class SublimeZillaCommand(sublime_plugin.WindowCommand):
                 except TypeError:
                     # Is probably not encoded, use what we had
                     PassValTmp = PassVal
+                except UnicodeDecodeError:
+                    # Is probably not encoded, use what we had
+                    print("Some error occurred decoding file password '%s'" % (PassVal))
+                    PassValTmp = PassVal
                 except binascii.Error:
                     # Is probably not encoded, use what we had
                     PassValTmp = PassVal
